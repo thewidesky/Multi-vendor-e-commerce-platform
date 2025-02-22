@@ -3,3 +3,5 @@ import os
 current_directory = os.getcwd()
 # 输出当前目录
 print("当前目录:", current_directory)
+
+# ceshi
