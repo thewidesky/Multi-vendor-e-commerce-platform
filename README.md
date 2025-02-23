@@ -1,41 +1,4 @@
 # Multi-vendor-e-commerce-platform
 A multi vendor e-commerce platform with the following functions: supplier management, product catalog management, product discovery, product purchase, and order modification.
 
-# 参考目录结构
-ecommerce_platform/
-├── main.py                 # 主程序入口
-├── config.py               # 数据库配置和全局常量
-├── database/               # 数据库相关模块
-│   ├── __init__.py
-│   ├── db_connector.py     # 数据库连接池管理
-│   └── schema.sql          # 数据库初始化脚本
-├── models/                 # 数据模型定义
-│   ├── __init__.py
-│   ├── supplier.py         # 供应商模型类
-│   ├── customer.py         # 客户模型类
-│   ├── product.py          # 产品模型类
-│   └── order.py            # 订单和交易模型类
-├── dao/                    # 数据访问层（数据库操作）
-│   ├── __init__.py
-│   ├── supplier_dao.py     # 供应商数据库操作
-│   ├── customer_dao.py     # 客户数据库操作
-│   ├── product_dao.py      # 产品数据库操作
-│   └── order_dao.py        # 订单数据库操作
-├── services/               # 业务逻辑层
-│   ├── __init__.py
-│   ├── supplier_service.py # 供应商管理逻辑
-│   ├── customer_service.py # 客户管理逻辑
-│   ├── product_service.py  # 产品管理逻辑
-│   ├── order_service.py    # 订单处理逻辑
-│   └── search_service.py   # 基于标签的产品搜索逻辑
-├── utils/                  # 辅助工具模块
-│   ├── __init__.py
-│   └── cli_utils.py        # 命令行界面工具（输入/输出格式化）
-└── tests/                  # 单元测试
-    ├── __init__.py
-    ├── test_supplier.py    # 供应商模块测试
-    ├── test_customer.py    # 客户模块测试
-    ├── test_product.py     # 产品模块测试
-    └── test_order.py       # 订单模块测试
-
 
