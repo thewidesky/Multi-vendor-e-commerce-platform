@@ -1,6 +1,8 @@
 # Multi-vendor-e-commerce-platform
 A multi vendor e-commerce platform with the following functions: supplier management, product catalog management, product discovery, product purchase, and order modification.
 
+
+
 # 请首先在config.py当中配置本地电脑的SQL
 包括用户名与密码等
 
