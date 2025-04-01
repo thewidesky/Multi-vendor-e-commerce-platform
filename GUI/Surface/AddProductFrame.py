@@ -9,15 +9,12 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from models.Product import Product
 
 class AddProductFrame(tk.Frame):
-    def __init__(self, master=None):
-        super().__init__(master)
-        self.master = master
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
         self.init_ui()
 
     def init_ui(self):
-        # 配置主窗口
-        self.master.title('添加商品')
-        self.master.geometry('400x500')
 
         # 创建并配置输入框和标签
         entries = [
@@ -56,11 +53,21 @@ class AddProductFrame(tk.Frame):
         self.sure_add_button = ttk.Button(self, text='Sure add the Product.')
         self.sure_add_button.grid(row=len(entries), column=0, columnspan=2, pady=20)
 
+        def back_to_vendor():
+            self.controller.title('供应商管理界面')
+            self.controller.geometry('800x600')
+            # 跳转至供应商管理系统界面
+            self.controller.show_frame("VendorManagementFrame")
+        # 创建返回按钮
+        self.back_btn = ttk.Button(self, text='Back', command=back_to_vendor)
+        self.back_btn.grid(row=len(entries)+1, column=0, columnspan=2, pady=20)
+
         # 配置网格权重
         self.grid_columnconfigure(1, weight=1)
 
         # 将主框架放置到窗口中
-        self.grid(padx=20, pady=20, sticky='nsew')
+        # self.grid(padx=20, pady=20, sticky='nsew')
+        self.grid(sticky='nsew')
 
     def on_entry_click(self, event, entry, placeholder):
         """当输入框获得焦点时，如果显示的是占位符则清空"""
@@ -75,7 +82,7 @@ class AddProductFrame(tk.Frame):
             entry.configure(foreground='gray')
 
 # 测试代码
-if __name__ == '__main__':
-    root = tk.Tk()
-    app = AddProductFrame(root)
-    root.mainloop()
+# if __name__ == '__main__':
+#     root = tk.Tk()
+#     app = AddProductFrame(root)
+#     root.mainloop()

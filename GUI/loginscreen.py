@@ -1,17 +1,17 @@
 from tkinter import (Tk, Label, PhotoImage, Entry, Button, Frame)
 import tkinter as tk
-from GUI.vendor import Vendor
+from GUI.Surface.VendorManagementFrame import VendorManagementFrame
 
 class LoginScreen(tk.Frame):
 
-    def __init__(self, parent):
+    def __init__(self, parent,controller):
         
-        tk.Frame.__init__(self, parent)
+        super().__init__(parent)
+        self.controller = controller
 
         def login():
             #TO DO
-            print('Login')
-            parent.switch_frame(Vendor)
+            parent.switch_frame(VendorManagementFrame)
 
         login_label = Label(self, text='Login', font=(
             'Arial', 30), fg='#00008b', bg='#808080')

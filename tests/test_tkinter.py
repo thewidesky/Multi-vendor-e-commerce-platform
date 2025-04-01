@@ -8,7 +8,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # 导入所需的DAO类
-from dao.Product_dao import ProductDAO
+from dao.product_dao import ProductDAO
 from dao.product_search_dao import ProductSearchDAO
 from dao.purchase_dao import PurchaseDAO
 from models.Product import Product

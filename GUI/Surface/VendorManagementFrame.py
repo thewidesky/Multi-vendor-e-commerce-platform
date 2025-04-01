@@ -6,18 +6,15 @@ import os
 # 添加项目根目录到系统路径
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from models.Product import Product
+# from models.Product import Product
 
 class VendorManagementFrame(tk.Frame):
-    def __init__(self, master=None):
-        super().__init__(master)
-        self.master = master
+    def __init__(self, parent,controller):
+        super().__init__(parent)
+        self.controller = controller
         self.init_ui()
 
     def init_ui(self):
-        # 配置主窗口
-        self.master.title('供应商管理系统')
-        self.master.geometry('800x600')
 
         # 创建搜索区域（顶部）
         search_frame = ttk.Frame(self)
@@ -26,11 +23,11 @@ class VendorManagementFrame(tk.Frame):
         # 搜索输入框
         self.search_var = tk.StringVar()
         self.search_entry = ttk.Entry(search_frame, textvariable=self.search_var, width=40)
-        self.search_entry.insert(0, 'Use the Product name to search.')
+        # self.search_entry.insert(0, 'Use the Product name to search.')
         self.search_entry.grid(row=0, column=0, padx=5)
 
         # 搜索按钮
-        self.search_button = ttk.Button(search_frame, text='Search')
+        self.search_button = ttk.Button(search_frame, text='Search Product Name')
         self.search_button.grid(row=0, column=1, padx=5)
 
         # 创建产品列表区域（中间）
@@ -63,8 +60,14 @@ class VendorManagementFrame(tk.Frame):
         button_frame = ttk.Frame(self)
         button_frame.grid(row=2, column=0, columnspan=3, padx=10, pady=5)
 
+        #进入添加产品界面方法
+        def go_to_add():
+            self.controller.title('添加产品')
+            # self.controller.geometry('800x600')
+            # 跳转至登录界面
+            self.controller.show_frame("AddProductFrame")
         # 添加产品按钮
-        self.add_button = ttk.Button(button_frame, text='Add_Product')
+        self.add_button = ttk.Button(button_frame, text='Add_Product', command=go_to_add)
         self.add_button.pack(side=tk.LEFT, padx=5)
 
         # 修改产品按钮
@@ -75,8 +78,14 @@ class VendorManagementFrame(tk.Frame):
         self.delete_button = ttk.Button(button_frame, text='Delete')
         self.delete_button.pack(side=tk.LEFT, padx=5)
 
+        #返回登录界面方法
+        def back_to_login():
+            self.controller.title('登录界面')
+            self.controller.geometry('500x500')
+            # 跳转至登录界面
+            self.controller.show_frame("LoginFrame")
         # 返回登录按钮
-        self.back_button = ttk.Button(button_frame, text='Back to Login')
+        self.back_button = ttk.Button(button_frame, text='Back to Login', command=back_to_login)
         self.back_button.pack(side=tk.LEFT, padx=5)
 
         # 配置网格权重，使产品列表区域可以自适应扩展
