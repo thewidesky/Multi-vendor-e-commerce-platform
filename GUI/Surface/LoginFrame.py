@@ -28,10 +28,23 @@ class LoginFrame(tk.Frame):
         
         #登录不同角色界面逻辑(目前只有供应商)
         def login():
-            if (True):
-                self.controller.change_size_title('800x600','供应商管理界面',)
-                # 跳转至供应商管理系统界面
-                self.controller.show_frame("VendorManagementFrame")
+            # 跳转至供应商管理系统界面的情况
+            self.controller.change_size_title('800x600','供应商管理界面',)
+            self.controller.show_frame("VendorManagementFrame")
+            # 跳转至管理系统界面的情况
+            # self.controller.change_size_title('800x600','管理系统界面',)
+            # self.controller.show_frame("AdministratorFrame")
+            # 跳转至用户界面的情况
+        #     test_data1 = [
+        #     (1, 1, 1, 'Test Product 1', 99.99, 100),
+        #     (2, 1, 2, 'Test Product 2', 149.99, 50),
+        #     (3, 2, 1, 'Test Product 3', 199.99, 75),
+            
+        # ]
+        #     self.controller.change_size_title('800x600','用户界面',)
+        #     self.controller.show_frame("UserFrame")
+            # self.controller.frames['UserFrame'].reload_product(product_data = test_data1)
+
         self.login_button = tk.Button(self, text="Login",command = login)
 
     def configure_layout(self):
@@ -53,15 +66,3 @@ class LoginFrame(tk.Frame):
         # 第四行：登录按钮
         self.login_button.grid(row=3, column=0, columnspan=3, pady=15, ipadx=20)
 
-# if __name__ == "__main__":
-#     root = tk.Tk()
-#     root.title("Supplier Management System")
-    
-#     # 设置窗口初始尺寸
-#     root.geometry("500x500")
-    
-#     # 创建登录界面实例
-#     login_frame = LoginFrame(root)
-#     login_frame.pack(expand=True, fill="both", padx=20, pady=10)
-    
-#     root.mainloop()

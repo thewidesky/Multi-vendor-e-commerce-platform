@@ -45,14 +45,14 @@ class ChangeProductFrame(tk.Frame):
         self.sure_change_button = ttk.Button(self, text='Sure Change the Product information.')
         self.sure_change_button.grid(row=len(entries), column=0, columnspan=2, pady=20)
 
-        # def back_to_vendor():
-        #     self.controller.title('供应商管理界面')
-        #     self.controller.geometry('800x600')
-        #     # 跳转至供应商管理系统界面
-        #     self.controller.show_frame("VendorManagementFrame")
-        # # 创建返回按钮
-        # self.back_btn = ttk.Button(self, text='Back', command=back_to_vendor)
-        # self.back_btn.grid(row=len(entries)+1, column=0, columnspan=2, pady=20)
+        def back_to_vendor():
+            self.controller.title('供应商管理界面')
+            self.controller.geometry('800x600')
+            # 跳转至供应商管理系统界面
+            self.controller.show_frame("VendorManagementFrame")
+        # 创建返回按钮
+        self.back_btn = ttk.Button(self, text='Back', command=back_to_vendor)
+        self.back_btn.grid(row=len(entries)+1, column=0, columnspan=2, pady=20)
 
         # 配置网格权重
         self.grid_columnconfigure(1, weight=1)

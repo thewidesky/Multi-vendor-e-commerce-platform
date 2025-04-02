@@ -4,14 +4,19 @@ from tkinter import ttk
 from datetime import datetime
 
 class RecordFrame(tk.Frame):
-    def __init__(self, master=None):
-        super().__init__(master)
-        self.master = master
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
         self.init_ui()
 
     def init_ui(self):
+        def back_to_user():
+            """返回用户界面"""
+            self.controller.change_size_title('800x600','用户界面',)
+            self.controller.show_frame("UserFrame")
+
         # 创建返回按钮（顶部）
-        self.back_button = ttk.Button(self, text="Back to Buy")
+        self.back_button = ttk.Button(self, text="Back to Buy", command=back_to_user)
         self.back_button.grid(row=0, column=0, padx=10, pady=10, sticky='w')
 
         # 创建记录显示区域（中间）
@@ -56,11 +61,6 @@ class RecordFrame(tk.Frame):
         self.grid_rowconfigure(1, weight=1)
         self.grid_columnconfigure(0, weight=1)
 
-        # 添加测试数据
-        self.insert_test_data()
-
-    def insert_test_data(self):
-        # 创建测试数据
         test_data = [
             (1, 101, 299.99, True, '2024-01-15'),
             (2, 102, 159.50, False, '2024-01-16'),
@@ -69,17 +69,19 @@ class RecordFrame(tk.Frame):
             (5, 105, 899.99, False, '2024-01-19')
         ]
 
-        # 插入测试数据到Treeview
-        for item in test_data:
-            self.record_list.insert('', 'end', values=item)
+        # 添加测试数据
+        self.reload_record(test_data)
 
-# 用于测试的main函数
-if __name__ == '__main__':
-    root = tk.Tk()
-    root.title('购买记录界面')
-    root.geometry('800x600')
+    def reload_record(self, record_data):
+        """record_list重新加载购买记录信息"""
+        if len(self.record_list.get_children()) != 0:
+            self.record_list.delete(*self.record_list.get_children())
+        for item in record_data:
+            self.record_list.insert('', 'end', values=item)
     
-    app = RecordFrame(root)
-    app.pack(fill='both', expand=True)
+    def get_current_record(self):
+        """获取当前的商品信息"""  
+        if (self.record_list.focus() != ""):    
+            current_record_values = self.record_list.item(self.record_list.focus())['values']
+            print(current_record_values)
     
-    root.mainloop()

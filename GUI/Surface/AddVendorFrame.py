@@ -2,9 +2,9 @@ import tkinter as tk
 # from models.Vendor import Vendor
 
 class AddVendorFrame(tk.Frame):
-    def __init__(self, master=None):
-        super().__init__(master)
-        self.master = master
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
         self.init_components()
         self.layout_components()
 
@@ -40,7 +40,18 @@ class AddVendorFrame(tk.Frame):
         self.vendor_secret_entry.bind('<FocusOut>', lambda e: self.on_focus_out(e, self.vendor_secret_entry, "Please write your Secret."))
         self.vendor_secret_entry.config(fg='grey')
 
-        self.sure_added_button = tk.Button(self, text="Sure Added the Vendor information.")
+        def back_to_admin():
+            """返回管理系统界面"""
+            self.controller.change_size_title('800x600','管理系统界面',)
+            self.controller.show_frame("AdministratorFrame")
+
+        def confirm_add():
+            """确认添加，返回管理系统界面"""
+            #TO DO
+            #添加逻辑
+
+        self.sure_added_button = tk.Button(self, text="Confirmed Added the Vendor information", command=confirm_add)
+        self.back_to_admin_button = tk.Button(self, text="Back to Admin", command=back_to_admin)
 
     def layout_components(self):
         # 使用网格布局排列组件
@@ -61,6 +72,8 @@ class AddVendorFrame(tk.Frame):
 
         self.sure_added_button.grid(row=5, column=0, columnspan=2, pady=20)
 
+        self.back_to_admin_button.grid(row=6, column=0, columnspan=2, pady=20)
+
         # 配置列权重使得输入框可以水平拉伸
         self.grid_columnconfigure(1, weight=1)
 
@@ -78,13 +91,3 @@ class AddVendorFrame(tk.Frame):
             entry.insert(0, default_text)
             entry.config(fg='grey')
 
-def main():
-    root = tk.Tk()
-    root.title("Add Vendor Information")
-    root.geometry("500x400")
-    app = AddVendorFrame(root)
-    app.pack(fill='both', expand=True, padx=20, pady=20)
-    root.mainloop()
-
-if __name__ == "__main__":
-    main()

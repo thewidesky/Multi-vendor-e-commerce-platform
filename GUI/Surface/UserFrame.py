@@ -1,13 +1,22 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 # from models.Product import Product
 # from models.ProductTag import ProductTag
 
 class UserFrame(tk.Frame):
-    def __init__(self, master=None):
-        super().__init__(master)
-        self.master = master
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
         self.init_ui()
+
+    def reload_product(self,product_data):
+        """Treeview重新加载商品信息"""
+        if len(self.tree.get_children()) != 0:
+            self.tree.delete(*self.tree.get_children())
+        # 重新从product_data添加数据到tree
+        for item in product_data:
+            self.tree.insert('', 'end', values=item)
 
     def init_ui(self):
         # 创建顶部搜索区域
@@ -15,20 +24,41 @@ class UserFrame(tk.Frame):
         search_frame.grid(row=0, column=0, columnspan=2, pady=10, padx=10, sticky='ew')
 
         # 搜索输入框和按钮
-        self.product_search = ttk.Entry(search_frame)
-        self.product_search.insert(0, 'Write Product id there.')
-        self.product_search.grid(row=0, column=0, padx=5)
-        self.product_search.bind('<FocusIn>', lambda e: self.on_entry_click(e, self.product_search, 'Use the Product id to search.'))
-        self.product_search.bind('<FocusOut>', lambda e: self.on_focus_out(e, self.product_search, 'Use the Product id to search.'))
+        self.product_search_entry = ttk.Entry(search_frame)
+        self.product_search_entry.insert(0, 'Write Product id there.')
+        self.product_search_entry.grid(row=0, column=0, padx=5)
 
-        self.tag_search = ttk.Entry(search_frame)
-        self.tag_search.insert(0, 'Write Tag id to there.')
-        self.tag_search.grid(row=0, column=2, padx=5)
-        self.tag_search.bind('<FocusIn>', lambda e: self.on_entry_click(e, self.tag_search, 'Use the Tag id to search.'))
-        self.tag_search.bind('<FocusOut>', lambda e: self.on_focus_out(e, self.tag_search, 'Use the Tag id to search.'))
+        self.tag_search_entry = ttk.Entry(search_frame)
+        self.tag_search_entry.insert(0, 'Write Tag id to there.')
+        self.tag_search_entry.grid(row=0, column=2, padx=5)
 
-        ttk.Button(search_frame, text='Search By Product').grid(row=0, column=1, padx=5)
-        ttk.Button(search_frame, text='Search By Tag').grid(row=0, column=3, padx=5)
+        def search_product():
+            """通过Product名筛选搜索"""
+            product_name = self.product_search_entry.get()
+            product_name = product_name.strip()
+            if len(product_name) != 0:
+                print("Product_name: " + product_name)
+            else:
+                if len(product_name) == 0:
+                    messagebox.showwarning(title="PRODUCT NAME ERROR", message="Product Name cannot be EMPTY!")
+                else:
+                    messagebox.showwarning(title="PRODUCT NAME ERROR", message="The Product Name : " + product_name + " you enter is INVALID")             
+                
+
+        def search_tag():
+            """通过Tag名筛选搜索"""
+            tag_name = self.tag_search_entry.get()
+            tag_name = tag_name.strip()
+            if len(tag_name) != 0:
+                print("Tag_name: " + tag_name)
+            else:
+                if len(tag_name) == 0:
+                    messagebox.showwarning(title="TAG ERROR", message="Tag Name cannot be EMPTY!")
+                else:
+                    messagebox.showwarning(title="TAG ERROR", message="The Tag: " + tag_name + " you enter is INVALID")
+        
+        self.search_product_button = ttk.Button(search_frame, text='Search By Product', command=search_product).grid(row=0, column=1, padx=5)
+        self.search_tag_button = ttk.Button(search_frame, text='Search By Tag', command=search_tag).grid(row=0, column=3, padx=5)
 
         # 创建产品列表区域
         list_frame = tk.Frame(self)
@@ -56,10 +86,40 @@ class UserFrame(tk.Frame):
         test_data = [
             (1, 1, 1, 'Test Product 1', 99.99, 100),
             (2, 1, 2, 'Test Product 2', 149.99, 50),
+            (3, 2, 1, 'Test Product 3', 199.99, 75),
+            (1, 1, 1, 'Test Product 1', 99.99, 100),
+            (2, 1, 2, 'Test Product 2', 149.99, 50),
+            (3, 2, 1, 'Test Product 3', 199.99, 75),
+            (1, 1, 1, 'Test Product 1', 99.99, 100),
+            (2, 1, 2, 'Test Product 2', 149.99, 50),
+            (3, 2, 1, 'Test Product 3', 199.99, 75),
+            (1, 1, 1, 'Test Product 1', 99.99, 100),
+            (2, 1, 2, 'Test Product 2', 149.99, 50),
+            (3, 2, 1, 'Test Product 3', 199.99, 75),
+            (1, 1, 1, 'Test Product 1', 99.99, 100),
+            (2, 1, 2, 'Test Product 2', 149.99, 50),
+            (3, 2, 1, 'Test Product 3', 199.99, 75),
+            (1, 1, 1, 'Test Product 1', 99.99, 100),
+            (2, 1, 2, 'Test Product 2', 149.99, 50),
+            (3, 2, 1, 'Test Product 3', 199.99, 75),
+            (1, 1, 1, 'Test Product 1', 99.99, 100),
+            (2, 1, 2, 'Test Product 2', 149.99, 50),
+            (3, 2, 1, 'Test Product 3', 199.99, 75),
+            (1, 1, 1, 'Test Product 1', 99.99, 100),
+            (2, 1, 2, 'Test Product 2', 149.99, 50),
+            (3, 2, 1, 'Test Product 3', 199.99, 75),
+            (1, 1, 1, 'Test Product 1', 99.99, 100),
+            (2, 1, 2, 'Test Product 2', 149.99, 50),
+            (3, 2, 1, 'Test Product 3', 199.99, 75),
+            (1, 1, 1, 'Test Product 1', 99.99, 100),
+            (2, 1, 2, 'Test Product 2', 149.99, 50),
+            (3, 2, 1, 'Test Product 3', 199.99, 75),
+            (1, 1, 1, 'Test Product 1', 99.99, 100),
+            (2, 1, 2, 'Test Product 2', 149.99, 50),
             (3, 2, 1, 'Test Product 3', 199.99, 75)
         ]
-        for item in test_data:
-            self.tree.insert('', 'end', values=item)
+
+        self.reload_product(product_data=test_data)
 
         # 布局Treeview和Scrollbar
         self.tree.grid(row=0, column=0, sticky='nsew')
@@ -68,9 +128,40 @@ class UserFrame(tk.Frame):
         # 创建底部按钮区域
         button_frame = tk.Frame(self)
         button_frame.grid(row=2, column=0, columnspan=2, pady=10)
+        
+        def get_current_item():
+            """获取当前的商品信息"""          
+            current_item_values = self.tree.item(self.tree.focus())['values']
+            print(current_item_values)
 
-        ttk.Button(button_frame, text='Buy Product').pack(side='left', padx=5)
-        ttk.Button(button_frame, text='Back to Login').pack(side='left', padx=5)
+        def buy_product():
+            """购买商品逻辑"""
+            if(self.tree.focus() == ""):
+                messagebox.showwarning(title="Selected Product", message="You need to select a PRODUCT first!")
+            else:
+                get_current_item()
+                print("Buy product")
+                messagebox.showinfo(title="Successful", message="You successfully bought this item")
+        
+        def show_record():
+            """显示商品购买记录界面"""
+            self.controller.change_size_title('800x600','购买记录',)
+            self.controller.show_frame("RecordFrame")
+        #     test_data = [
+        #     (1, 101, 299.99, True, '2024-01-15'),
+        #     (2, 102, 159.50, False, '2024-01-16'),
+        # ]
+        #     self.controller.frames["RecordFrame"].reload_record(test_data)
+
+        def back_to_login():
+            """返回登录界面"""
+            self.controller.change_size_title('500x500','登录界面',)
+            self.controller.show_frame("LoginFrame")
+
+        ttk.Button(button_frame, text='Buy Product', command=buy_product).pack(side='left', padx=5)
+        ttk.Button(button_frame, text='Show Buy Record',command=show_record).pack(side='left', padx=5)
+        ttk.Button(button_frame, text='Back to Login',command=back_to_login).pack(side='left', padx=5)
+        
 
         # 配置grid权重
         self.grid_rowconfigure(1, weight=1)
@@ -78,23 +169,4 @@ class UserFrame(tk.Frame):
         list_frame.grid_rowconfigure(0, weight=1)
         list_frame.grid_columnconfigure(0, weight=1)
 
-    def on_entry_click(self, event, entry, default_text):
-        if entry.get() == default_text:
-            entry.delete(0, 'end')
-            entry.config(foreground='black')
-
-    def on_focus_out(self, event, entry, default_text):
-        if entry.get() == '':
-            entry.insert(0, default_text)
-            entry.config(foreground='gray')
-
-def main():
-    root = tk.Tk()
-    root.title('User Interface')
-    root.geometry('800x600')
-    app = UserFrame(root)
-    app.pack(fill='both', expand=True)
-    root.mainloop()
-
-if __name__ == '__main__':
-    main()
+    

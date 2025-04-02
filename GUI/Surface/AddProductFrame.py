@@ -54,11 +54,10 @@ class AddProductFrame(tk.Frame):
         self.sure_add_button.grid(row=len(entries), column=0, columnspan=2, pady=20)
 
         def back_to_vendor():
-            # self.controller.title('供应商管理界面')
-            # self.controller.geometry('800x600')
+            """跳转至供应商管理系统界面"""
             self.controller.change_size_title('800x600','供应商管理界面')
-            # 跳转至供应商管理系统界面
             self.controller.show_frame("VendorManagementFrame")
+            
         # 创建返回按钮
         self.back_btn = ttk.Button(self, text='Back', command=back_to_vendor)
         self.back_btn.grid(row=len(entries)+1, column=0, columnspan=2, pady=20)
@@ -81,9 +80,3 @@ class AddProductFrame(tk.Frame):
         if entry.get() == '':
             entry.insert(0, placeholder)
             entry.configure(foreground='gray')
-
-# 测试代码
-# if __name__ == '__main__':
-#     root = tk.Tk()
-#     app = AddProductFrame(root)
-#     root.mainloop()

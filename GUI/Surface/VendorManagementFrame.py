@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 import sys
 import os
 
@@ -27,7 +28,21 @@ class VendorManagementFrame(tk.Frame):
         self.search_entry.grid(row=0, column=0, padx=5)
 
         # 搜索按钮
-        self.search_button = ttk.Button(search_frame, text='Search Product Name')
+        def search_product():
+            """通过商品名搜索商品"""
+            product_name = self.search_entry.get()
+            product_name = product_name.strip()
+            test_data = [
+            (1, '笔记本电脑', 5999.00, 50, '在售'),
+            (2, '智能手机', 3999.00, 100, '在售'),
+        ]
+            if product_name != "":
+                print(product_name)
+                self.reload_product_data(test_data)
+            else:
+                messagebox.showwarning(title="No product Name", message="You need to input a product name before pressing button")
+                
+        self.search_button = ttk.Button(search_frame, text='Search Product Name', command=search_product)
         self.search_button.grid(row=0, column=1, padx=5)
 
         # 创建产品列表区域（中间）
@@ -60,29 +75,40 @@ class VendorManagementFrame(tk.Frame):
         button_frame = ttk.Frame(self)
         button_frame.grid(row=2, column=0, columnspan=3, padx=10, pady=5)
 
-        #进入添加产品界面方法
         def go_to_add():
-            # self.controller.title('添加产品')
-            # self.controller.geometry('800x600')
+            """跳转到添加商品界面"""
             self.controller.change_size_title('800x600','添加产品')
-            # 跳转至登录界面
             self.controller.show_frame("AddProductFrame")
+
+        def delete_product():
+            """删除商品"""
+            if self.get_current_product():
+                print(self.get_current_product())
+            else:
+                messagebox.showwarning(title="No Product Selection", message="You need to select a item before pressing button!")
+
+        def go_to_change():
+            """跳转至修改商品界面"""
+            if self.product_tree.focus() != "":
+                self.controller.change_size_title('800x600','修改产品')
+                self.controller.show_frame("ChangeProductFrame")
+            else:
+                messagebox.showwarning(title="No Product Selection", message="You need to select a item before pressing button!")
+
         # 添加产品按钮
         self.add_button = ttk.Button(button_frame, text='Add_Product', command=go_to_add)
         self.add_button.pack(side=tk.LEFT, padx=5)
 
         # 修改产品按钮
-        self.change_button = ttk.Button(button_frame, text='Change Product information')
+        self.change_button = ttk.Button(button_frame, text='Change Product information', command=go_to_change)
         self.change_button.pack(side=tk.LEFT, padx=5)
 
         # 删除按钮
-        self.delete_button = ttk.Button(button_frame, text='Delete')
+        self.delete_button = ttk.Button(button_frame, text='Delete', command=delete_product)
         self.delete_button.pack(side=tk.LEFT, padx=5)
 
         #返回登录界面方法
         def back_to_login():
-            # self.controller.title('登录界面')
-            # self.controller.geometry('500x500')
             self.controller.change_size_title('500x500','登录界面')
             # 跳转至登录界面
             self.controller.show_frame("LoginFrame")
@@ -98,11 +124,6 @@ class VendorManagementFrame(tk.Frame):
         # 将主框架放置到窗口中
         self.grid(row=0, column=0, sticky='nsew')
 
-        # 添加测试数据
-        self.add_test_data()
-
-    def add_test_data(self):
-        # 添加一些测试数据到产品列表
         test_data = [
             (1, '笔记本电脑', 5999.00, 50, '在售'),
             (2, '智能手机', 3999.00, 100, '在售'),
@@ -110,12 +131,23 @@ class VendorManagementFrame(tk.Frame):
             (4, '平板电脑', 4999.00, 30, '缺货'),
             (5, '智能手表', 1999.00, 80, '在售')
         ]
-        
-        for item in test_data:
+
+        # 添加测试数据
+        self.reload_product_data(test_data)
+
+    def reload_product_data(self, product_data):
+        """重新加载商品信息"""
+        if len(self.product_tree.get_children()) != 0:
+            self.product_tree.delete(*self.product_tree.get_children())
+        for item in product_data:
             self.product_tree.insert('', 'end', values=item)
 
-# 测试代码
-if __name__ == '__main__':
-    root = tk.Tk()
-    app = VendorManagementFrame(root)
-    root.mainloop()
+
+    def get_current_product(self):
+        """获取当前商品信息"""
+        if self.product_tree.focus() != "":    
+            current_product_values = self.product_tree.item(self.product_tree.focus())['values']
+            print(current_product_values)
+            return current_product_values
+        else:
+            return None

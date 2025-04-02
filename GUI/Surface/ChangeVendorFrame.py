@@ -2,9 +2,9 @@ import tkinter as tk
 # from models.Vendor import Vendor
 
 class ChangeVendorFrame(tk.Frame):
-    def __init__(self, master=None):
-        super().__init__(master)
-        self.master = master
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
         self.init_components()
         self.layout_components()
 
@@ -40,7 +40,19 @@ class ChangeVendorFrame(tk.Frame):
         self.vendor_secret_entry.bind('<FocusOut>', lambda e: self.on_focus_out(e, self.vendor_secret_entry, "Please write your Secret."))
         self.vendor_secret_entry.config(fg='grey')
 
-        self.sure_changed_button = tk.Button(self, text="Sure Changed the Vendor information.")
+        def back_to_admin():
+            """返回管理系统界面"""
+            self.controller.change_size_title('800x600','管理系统界面',)
+            self.controller.show_frame("AdministratorFrame")
+
+        def confirm_add():
+            """确认添加，返回管理系统界面"""
+            #TO DO
+            #添加逻辑
+            back_to_admin()
+
+        self.sure_changed_button = tk.Button(self, text="Sure Changed the Vendor information.", command=confirm_add)
+        self.back_to_admin_button = tk.Button(self, text="Back to Admin", command=back_to_admin)
 
     def layout_components(self):
         # 使用网格布局排列组件
@@ -60,6 +72,7 @@ class ChangeVendorFrame(tk.Frame):
         tk.Label(self, text="Secret:").grid(row=4, column=0, padx=10, pady=5, sticky='e')
 
         self.sure_changed_button.grid(row=5, column=0, columnspan=2, pady=20)
+        self.back_to_admin_button.grid(row=6, column=0, columnspan=2, pady=20)
 
         # 配置列权重使得输入框可以水平拉伸
         self.grid_columnconfigure(1, weight=1)
@@ -77,14 +90,9 @@ class ChangeVendorFrame(tk.Frame):
         if entry.get() == '':
             entry.insert(0, default_text)
             entry.config(fg='grey')
+    
+    def receive_vendor_value(self, values):
+        """接收其他Frame传来的信息"""
+        self.vendor_id_entry.insert(0,values[0])
 
-def main():
-    root = tk.Tk()
-    root.title("Change Vendor Information")
-    root.geometry("500x400")
-    app = ChangeVendorFrame(root)
-    app.pack(fill='both', expand=True, padx=20, pady=20)
-    root.mainloop()
 
-if __name__ == "__main__":
-    main()
