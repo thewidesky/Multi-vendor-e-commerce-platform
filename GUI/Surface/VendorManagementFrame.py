@@ -62,8 +62,9 @@ class VendorManagementFrame(tk.Frame):
 
         #进入添加产品界面方法
         def go_to_add():
-            self.controller.title('添加产品')
+            # self.controller.title('添加产品')
             # self.controller.geometry('800x600')
+            self.controller.change_size_title('800x600','添加产品')
             # 跳转至登录界面
             self.controller.show_frame("AddProductFrame")
         # 添加产品按钮
@@ -80,10 +81,12 @@ class VendorManagementFrame(tk.Frame):
 
         #返回登录界面方法
         def back_to_login():
-            self.controller.title('登录界面')
-            self.controller.geometry('500x500')
+            # self.controller.title('登录界面')
+            # self.controller.geometry('500x500')
+            self.controller.change_size_title('500x500','登录界面')
             # 跳转至登录界面
             self.controller.show_frame("LoginFrame")
+            self.controller.reset_login()
         # 返回登录按钮
         self.back_button = ttk.Button(button_frame, text='Back to Login', command=back_to_login)
         self.back_button.pack(side=tk.LEFT, padx=5)

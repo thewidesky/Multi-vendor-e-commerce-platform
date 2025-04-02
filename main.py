@@ -5,34 +5,10 @@ from GUI.loginscreen import LoginScreen
 from GUI.Surface.VendorManagementFrame import VendorManagementFrame
 from GUI.Surface.AddProductFrame import AddProductFrame
 
-# apptitle = ""
-
-# class App(tk.Tk):
-    
-#     def __init__(self):
-#         tk.Tk.__init__(self)
-
-#         self._frame = None
-#         self.switch_frame(LoginFrame)
-        
-    
-#     def switch_frame(self,frame_class):
-#         """Destory current frame and replace it with a new one"""
-#         new_frame = frame_class(self)
-#         if self._frame is not None:
-#             self._frame.destroy()
-#             print('Destory called')
-#         self._frame = new_frame
-#         self._frame.pack()
-
-# if __name__ == '__main__':
-#     app = App()
-#     app.title = "Multi-vendor-e-commerce-platform"
-#     app.geometry('500x500')
-#     app.mainloop()
 
 
 class MainApplication(tk.Tk):
+    """App的主类(controller),其他frame可以通过self.controller.方法名 调用controller的方法"""
     def __init__(self):
         super().__init__()
         self.title('登录界面')
@@ -45,6 +21,7 @@ class MainApplication(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
         
         # 界面集合
+        # 可以从Frame中通过self.controller.frames['frame名字'].控件名 修改其他frame的控件
         self.frames = {}
         for F in (LoginFrame, VendorManagementFrame, AddProductFrame):
             frame = F(container, self)
@@ -56,9 +33,22 @@ class MainApplication(tk.Tk):
         
         self.show_frame("LoginFrame")
 
+    
+    # 跳转页面
     def show_frame(self, page_name):
         frame = self.frames[page_name]
         frame.tkraise()
+    
+    # 重置登录界面
+    def reset_login(self):
+        print('reset_login called')
+        self.frames['LoginFrame'].username_entry.delete(0,'end')
+        self.frames['LoginFrame'].password_entry.delete(0,'end')
+
+    def change_size_title(self, size, title):
+        self.geometry(size)
+        self.title(title)
+
 
 # class LoginFrame(tk.Frame):
 #     def __init__(self, parent, controller):

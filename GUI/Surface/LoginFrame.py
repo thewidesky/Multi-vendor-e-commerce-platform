@@ -29,9 +29,7 @@ class LoginFrame(tk.Frame):
         #登录不同角色界面逻辑(目前只有供应商)
         def login():
             if (True):
-                # 配置主窗口
-                self.controller.title('供应商管理界面')
-                self.controller.geometry('800x600')
+                self.controller.change_size_title('800x600','供应商管理界面',)
                 # 跳转至供应商管理系统界面
                 self.controller.show_frame("VendorManagementFrame")
         self.login_button = tk.Button(self, text="Login",command = login)
