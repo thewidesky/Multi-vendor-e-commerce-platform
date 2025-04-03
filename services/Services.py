@@ -7,6 +7,9 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from dao.manager_dao import ManagerDAO
 from dao.Vendor_dao import VendorDAO
 from dao.product_dao import ProductDAO
+from dao.product_search_dao import ProductSearchDAO
+from dao.purchase_dao import PurchaseDAO
+
 
 def get_data_by_user(username, password):
     """根据用户名和密码获取相应的数据
@@ -46,6 +49,38 @@ def get_data_by_user(username, password):
     
     return []
 
+
+
+def get_products_by_tag_id(tag_id):
+    """根据标签ID获取产品信息
+    Args:
+        tag_id (int): 标签ID
+    Returns:
+        list: 包含产品信息元组的列表，每个元组包含(ProductID、VendorID、CategoryID、ProductName、Price、Stock)
+    """
+    product_search_dao = ProductSearchDAO()
+    products = product_search_dao.get_products_by_tag(tag_id)
+    return [(p.p_id, p.v_id, p.category_id, p.p_name, float(p.price), p.stock)
+            for p in products]
+
+
+
+def get_product_by_id(product_id):
+    """根据产品ID获取产品信息
+    Args:
+        product_id (int): 产品ID
+    Returns:
+        list: 包含产品信息元组的列表，每个元组包含(ProductID、VendorID、CategoryID、ProductName、Price、Stock)
+    """
+    product_dao = ProductDAO()
+    product = product_dao.get_product_by_id(product_id)
+    if product:
+        return [(product.p_id, product.v_id, product.category_id, product.p_name, float(product.price), product.stock)]
+    return []
+
+
+
+
 # 测试代码
 def test_get_data():
     # 测试管理员登录
@@ -69,6 +104,7 @@ def test_get_data():
     print("错误登录数据: {0}".format(data))
 
 
+
 # 检查用户类型
 def check_user_type(username, password):
     """根据用户名和密码判断用户类型
@@ -79,8 +115,8 @@ def check_user_type(username, password):
         tuple: (user_type, user_id) 其中user_type为'Manager', 'Customer', 'Vendor'或'Password Error'，
               user_id为对应的用户ID，当验证失败时为None
     """
-    from dao.manager_dao import ManagerDAO
-    from dao.Vendor_dao import VendorDAO
+    # from dao.manager_dao import ManagerDAO
+    # from dao.Vendor_dao import VendorDAO
 
     # 创建DAO实例
     manager_dao = ManagerDAO()
@@ -112,5 +148,68 @@ def check_user_type(username, password):
 
     return ('Password Error', None)
 
+
+
+# 测试代码
+def test_get_products_by_tag():
+    print("\n测试根据标签获取产品:")
+    # 测试标签ID为1的产品
+    data = get_products_by_tag_id(1)
+    print("标签1的产品数据: {0}".format(data))
+    
+    # 测试标签ID为2的产品
+    data = get_products_by_tag_id(2)
+    print("标签2的产品数据: {0}".format(data))
+
+
+
+# 测试代码
+def test_get_product_by_id():
+    print("\n测试根据产品ID获取产品:")
+    # 测试产品ID为1的产品
+    data = get_product_by_id(1)
+    print("产品1的数据: {0}".format(data))
+    
+    # 测试不存在的产品ID
+    data = get_product_by_id(9999)
+    print("不存在的产品数据: {0}".format(data))
+
+
+
+def get_purchase_records_by_user(user_id):
+    """根据用户ID获取购买记录
+    Args:
+        user_id (int): 用户ID
+    Returns:
+        list: 包含购买记录元组的列表，每个元组包含(RecordID、ShippingID、TotalMoney、Status、DateTime)
+    """
+    # from dao.purchase_dao import PurchaseDAO
+    
+    # 创建DAO实例并获取用户的购买记录
+    purchase_dao = PurchaseDAO()
+    records = purchase_dao.get_purchases_by_customer(user_id)
+    
+    # 转换为指定格式的元组列表
+    return [(r.r_id, r.s_id, float(r.toal), r.r_status, r.r_date) 
+            for r in records]
+
+
+# 测试代码
+def test_get_purchase_records():
+    print("\n测试获取用户购买记录:")
+    # 测试用户ID为1的购买记录
+    test_user_id = 1
+    records = get_purchase_records_by_user(test_user_id)
+    print("用户{0}的购买记录: {1}".format(test_user_id, records))
+    
+    # 测试不存在的用户ID
+    test_user_id = 9999
+    records = get_purchase_records_by_user(test_user_id)
+    print("不存在用户{0}的购买记录: {1}".format(test_user_id, records))
+
+
 if __name__ == "__main__":
     test_get_data()
+    test_get_products_by_tag()
+    test_get_product_by_id()
+    test_get_purchase_records()
