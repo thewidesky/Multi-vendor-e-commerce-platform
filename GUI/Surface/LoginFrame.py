@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
-from main import check_user_type
+from services.Services import check_user_type,get_data_by_user
 
 class LoginFrame(tk.Frame):
     def __init__(self, parent, controller):
@@ -37,25 +37,29 @@ class LoginFrame(tk.Frame):
             if len(username) == 0 or len(password) == 0:
                 messagebox.showwarning(title="用户名密码为空",message="用户名或者密码不能为空")
             else:
-                if check_user_type(username=username, password=password) == "Vendor":
+                (type,id) = (check_user_type(username=username, password=password))
+                if type == "Vendor":
                 # 跳转至供应商管理系统界面的情况
+                    product_data = get_data_by_user(username=username,password=password)
+                    print(product_data)
                     self.controller.change_size_title('800x600','供应商管理界面',)
                     self.controller.show_frame("VendorManagementFrame")
-                elif check_user_type(username=username, password=password) == "Manager":
+                    self.controller.frames["VendorManagementFrame"].reload_product_data(product_data)
+                elif type == "Manager":
                 # 跳转至管理系统界面的情况
                     self.controller.change_size_title('800x600','管理系统界面',)
                     self.controller.show_frame("AdministratorFrame")
-                elif check_user_type(username=username, password=password) == "Customer":
+                elif type == "Customer":
                 # 跳转至用户界面的情况
-                    test_data1 = [
-                    (1, 1, 1, 'Test Product 1', 99.99, 100),
-                    (2, 1, 2, 'Test Product 2', 149.99, 50),
-                    (3, 2, 1, 'Test Product 3', 199.99, 75),
+                #     test_data1 = [
+                #     (1, 1, 1, 'Test Product 1', 99.99, 100),
+                #     (2, 1, 2, 'Test Product 2', 149.99, 50),
+                #     (3, 2, 1, 'Test Product 3', 199.99, 75),
                     
-                ]
+                # ]
                     self.controller.change_size_title('800x600','用户界面',)
                     self.controller.show_frame("UserFrame")
-                    self.controller.frames['UserFrame'].reload_product(product_data = test_data1)
+                    # self.controller.frames['UserFrame'].reload_product(product_data = test_data1)
 
         self.login_button = tk.Button(self, text="Login",command = login)
 
