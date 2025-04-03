@@ -13,6 +13,7 @@ COMMENT='存储供应商基本信息';
 
 CREATE TABLE IF NOT EXISTS Manager (
     M_ID INT NOT NULL AUTO_INCREMENT COMMENT 'Manager ID',
+    M_Name VARCHAR(255) NOT NULL COMMENT 'Manager Name',
     M_Secret VARCHAR(255) NOT NULL COMMENT 'Manager Secret',
     PRIMARY KEY (M_ID)
 ) 

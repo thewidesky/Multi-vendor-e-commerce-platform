@@ -43,6 +43,7 @@ A multi vendor e-commerce platform with the following functions: supplier manage
 3.根据管理员ID修改相应的信息
 4.根据管理员ID删除相应的信息
 5.向数据库中写入一个管理员信息
+6.获取所有使用者(User)的信息
 
 商品评论管理(与feedback有关)：--feedback_dao.py
 1.根据顾客的ID获取评论

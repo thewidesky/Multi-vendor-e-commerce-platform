@@ -53,7 +53,62 @@ class MainApplication(tk.Tk):
         self.geometry(size)
         self.title(title)
 
+# 检查用户类型
+def check_user_type(username, password):
+    """根据用户名和密码判断用户类型
+    Args:
+        username (str): 用户名
+        password (str): 密码
+    Returns:
+        tuple: (user_type, user_id) 其中user_type为'Manager', 'Customer', 'Vendor'或'Password Error'，
+              user_id为对应的用户ID，当验证失败时为None
+    """
+    from dao.manager_dao import ManagerDAO
+    from dao.Vendor_dao import VendorDAO
+
+    # 创建DAO实例
+    manager_dao = ManagerDAO()
+    vendor_dao = VendorDAO()
+
+    # 检查是否为管理员
+    managers = manager_dao.get_all_managers()
+    for manager in managers:
+        if str(manager.m_name) == username:
+            if str(manager.m_secret) == password:
+                return ('Manager', manager.m_id)
+            return ('Password Error', None)
+
+    # 检查是否为普通用户
+    customers = manager_dao.get_all_customer()
+    for customer in customers:
+        if customer.c_name == username:
+            if str(customer.c_secret) == password:
+                return ('Customer', customer.c_id)
+            return ('Password Error', None)
+
+    # 检查是否为供应商
+    vendors = vendor_dao.get_all_vendors()
+    for vendor in vendors:
+        if vendor.business_name == username:
+            if str(vendor.v_secret) == password:
+                return ('Vendor', vendor.v_id)
+            return ('Password Error', None)
+
+    return ('Password Error', None)
+
 
 if __name__ == "__main__":
+    # 测试用户类型检查功能
+    test_cases = [
+        ('Alice Johnson', 'secret001'),  # 管理员测试用例
+        ('ChicDress Boutique', 'secret12345'),  # 普通用户测试用例
+        ('fashion_store', 'vendor456'),  # 供应商测试用例
+        ('Manger','secret009'),
+        ('Manger','111')
+    ]
+    for username, password in test_cases:
+        user_type = check_user_type(username, password)
+        print('用户名: {} -> 用户类型: {}'.format(username, user_type))
+
     app = MainApplication()
     app.mainloop()

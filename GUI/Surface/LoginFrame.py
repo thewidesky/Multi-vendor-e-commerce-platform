@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 
 class LoginFrame(tk.Frame):
     def __init__(self, parent, controller):
@@ -29,12 +30,19 @@ class LoginFrame(tk.Frame):
         #登录不同角色界面逻辑(目前只有供应商)
         def login():
             # 跳转至供应商管理系统界面的情况
-            self.controller.change_size_title('800x600','供应商管理界面',)
-            self.controller.show_frame("VendorManagementFrame")
+            # self.controller.change_size_title('800x600','供应商管理界面',)
+            # self.controller.show_frame("VendorManagementFrame")
             # 跳转至管理系统界面的情况
-            # self.controller.change_size_title('800x600','管理系统界面',)
-            # self.controller.show_frame("AdministratorFrame")
+            self.controller.change_size_title('800x600','管理系统界面',)
+            self.controller.show_frame("AdministratorFrame")
             # 跳转至用户界面的情况
+        #     password = self.password_entry.get()
+        #     password = password.strip()
+        #     if len(password) != 0 :
+        #         pass
+        #     else:
+        #         messagebox.showwarning(title="abc", message="no password")
+
         #     test_data1 = [
         #     (1, 1, 1, 'Test Product 1', 99.99, 100),
         #     (2, 1, 2, 'Test Product 2', 149.99, 50),
