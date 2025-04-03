@@ -214,6 +214,46 @@ class ProductDAO:
                 conn.close()
 
 
+    # 功能6：获取所有产品信息
+    def get_all_products(self):
+        sql = """SELECT 
+                p.P_ID as p_id,
+                p.V_ID as v_id,
+                p.Category_ID as category_id,
+                p.P_Name as p_name,
+                p.Price as price,
+                p.Stock as stock,
+                p.P_Status as p_status,
+                p.P_Picture as p_picture
+                FROM Product p"""
+        
+        products = []
+        conn = None
+        try:
+            conn = self._get_connection()
+            with conn.cursor() as cursor:
+                cursor.execute(sql)
+                results = cursor.fetchall()
+                for row in results:
+                    converted = {
+                        'p_id': row['p_id'],
+                        'v_id': row['v_id'],
+                        'category_id': row['category_id'],
+                        'p_name': row['p_name'],
+                        'price': float(row['price']) if row['price'] else 0.0,
+                        'stock': row['stock'],
+                        'p_status': row['p_status'],
+                        'p_picture': row['p_picture']
+                    }
+                    products.append(Product.from_dict(converted))
+            return products
+        except Exception as e:
+            raise RuntimeError("获取所有产品失败: {0}".format(str(e)))
+        finally:
+            if conn:
+                conn.close()
+
+
 if __name__ == "__main__":
     def test_product_dao():
         dao = ProductDAO()
@@ -288,5 +328,14 @@ if __name__ == "__main__":
                     print("删除测试失败")
             except Exception as e:
                 print("删除测试失败: {0}".format(str(e)))
+
+        # 测试获取所有产品
+        try:
+            all_products = dao.get_all_products()
+            print("数据库中共有{0}个产品".format(len(all_products)))
+            if all_products:
+                print("第一个产品信息: {0}".format(all_products[0].to_dict()))
+        except Exception as e:
+            print("获取所有产品失败: {0}".format(str(e)))
 
     test_product_dao()

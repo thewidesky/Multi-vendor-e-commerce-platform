@@ -29,41 +29,29 @@ class LoginFrame(tk.Frame):
         
         #登录不同角色界面逻辑(目前只能写死)
         def login():
-            """登录判断逻辑"""
-            username = self.username_entry.get()
-            username = username.strip()
-            password = self.password_entry.get()
-            password = password.strip()
-            # 判断用户名和密码不能为空
-            if len(username) == 0 or len(password) ==0:
-                messagebox.showwarning(title="用户名密码错误", message="用户名或者密码不能为空")
-            else:
-                # 跳转至供应商管理系统界面的情况
-        #         test_data = [
-        #     (1, '笔记本电脑', 5999.00, 50, '在售'),
-        #     (2, '智能手机', 3999.00, 100, '在售')
+            # 跳转至供应商管理系统界面的情况
+            # self.controller.change_size_title('800x600','供应商管理界面',)
+            # self.controller.show_frame("VendorManagementFrame")
+            # 跳转至管理系统界面的情况
+            self.controller.change_size_title('800x600','管理系统界面',)
+            self.controller.show_frame("AdministratorFrame")
+            # 跳转至用户界面的情况
+        #     password = self.password_entry.get()
+        #     password = password.strip()
+        #     if len(password) != 0 :
+        #         pass
+        #     else:
+        #         messagebox.showwarning(title="abc", message="no password")
+
+        #     test_data1 = [
+        #     (1, 1, 1, 'Test Product 1', 99.99, 100),
+        #     (2, 1, 2, 'Test Product 2', 149.99, 50),
+        #     (3, 2, 1, 'Test Product 3', 199.99, 75),
+            
         # ]
-        #         self.controller.change_size_title('800x600','供应商管理界面',)
-        #         self.controller.show_frame("VendorManagementFrame")
-        #         self.controller.frames["VendorManagementFrame"].reload_product_data(test_data)
-                # 跳转至管理系统界面的情况
-                test_data = [
-            (1, "ABC Electronics", "Hong Kong"),
-            (2, "XYZ Trading", "Shanghai")
-        ]
-                self.controller.change_size_title('800x600','管理系统界面',)
-                self.controller.show_frame("AdministratorFrame")
-                self.controller.frames["AdministratorFrame"].reload_vendor_data(test_data)
-                # 跳转至用户界面的情况
-            #     test_data1 = [
-            #     (1, 1, 1, 'Test Product 1', 99.99, 100),
-            #     (2, 1, 2, 'Test Product 2', 149.99, 50),
-            #     (3, 2, 1, 'Test Product 3', 199.99, 75),
-                
-            # ]
-            #     self.controller.change_size_title('800x600','用户界面',)
-            #     self.controller.show_frame("UserFrame")
-            #     self.controller.frames['UserFrame'].reload_product(product_data = test_data1)
+        #     self.controller.change_size_title('800x600','用户界面',)
+        #     self.controller.show_frame("UserFrame")
+            # self.controller.frames['UserFrame'].reload_product(product_data = test_data1)
 
         self.login_button = tk.Button(self, text="Login",command = login)
 
