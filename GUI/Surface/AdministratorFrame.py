@@ -9,11 +9,15 @@ class AdministratorFrame(tk.Frame):
         self.init_ui()
 
     def init_ui(self):
+
+        #存储manager_id的变量
+        self.manager_id = 0
          
         def back_to_login():
             """返回登录界面"""
             self.controller.change_size_title('500x500','登录界面',)
             self.controller.show_frame("LoginFrame")
+            self.controller.reset_login()
         # 创建返回按钮
         self.back_button = tk.Button(self, text="Back to Login", command=back_to_login)
         self.back_button.grid(row=0, column=0, padx=10, pady=10, sticky='w')
@@ -51,6 +55,10 @@ class AdministratorFrame(tk.Frame):
             """前往添加商户界面"""
             self.controller.change_size_title('800x600','添加商户界面',)
             self.controller.show_frame("AddVendorFrame")
+            send_data = list()
+            send_data.append(self.manager_id)
+            #删除AddVendorFrame中所有entry的值并发送当前manager_id
+            self.controller.frames["AddVendorFrame"].receive_manager_id_and_delete_entry(send_data)
         
         def delete_vendor():
             """删除商户"""
@@ -62,7 +70,20 @@ class AdministratorFrame(tk.Frame):
             if self.vendor_list.focus() != "":
                 self.controller.change_size_title('800x600','修改商户界面',)
                 self.controller.show_frame("ChangeVendorFrame")
-                self.controller.frames["ChangeVendorFrame"].receive_vendor_value(self.get_current_vendor())
+                current_vendor_data = self.get_current_vendor()
+                vendor_id = current_vendor_data[0]
+                send_data = list()
+                #send_data第一个应该是manager_id
+                send_data.append(self.manager_id)
+                #第二个是vendoor_id
+                send_data.append(vendor_id)
+                #第三个是business_name
+                #第四个是geo_presence
+                #第五个是vendor_account
+                #第六个是vendor_secret
+
+                #将send_data中的数据发送给ChangeVendorFrame接收
+                self.controller.frames["ChangeVendorFrame"].receive_vendor_value_and_reload_entries(send_data)
             else:
                 messagebox.showwarning(title="Empty Vendor Selection", message="You need to select a vendor before pressing the button!")
             
@@ -93,17 +114,25 @@ class AdministratorFrame(tk.Frame):
 
     def reload_vendor_data(self, vendor_data):
         """重新载入商户信息"""
+        #如果Treeview不为空，则删除Treeview中所有item
         if len(self.vendor_list.get_children()) != 0:
             self.vendor_list.delete(*self.vendor_list.get_children())
+        #将新的数据添加到Treeview中
         for item in vendor_data:
             self.vendor_list.insert('', 'end', values=item)
     
     def get_current_vendor(self):
         """获取当前商户信息"""
+        #如果当前选取不为空，则返回当前vendor的信息，否则返回None
         if self.vendor_list.focus() != "":    
             current_vendor_values = self.vendor_list.item(self.vendor_list.focus())['values']
             print(current_vendor_values)
             return current_vendor_values
         else:
             return None
+        
+    def receive_manager_data(self, data):
+        """获取manager相关信息"""
+        self.manager_id = data[0]
+
 

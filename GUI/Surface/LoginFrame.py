@@ -34,6 +34,7 @@ class LoginFrame(tk.Frame):
             username = username.strip()
             password = self.password_entry.get()
             password = password.strip()
+            # 判断当前username和password，不能为空
             if len(username) == 0 or len(password) == 0:
                 messagebox.showwarning(title="用户名密码为空",message="用户名或者密码不能为空")
             else:
@@ -41,25 +42,39 @@ class LoginFrame(tk.Frame):
                 if type == "Vendor":
                 # 跳转至供应商管理系统界面的情况
                     product_data = get_data_by_user(username=username,password=password)
-                    print(product_data)
+                    # print(product_data)
                     self.controller.change_size_title('800x600','供应商管理界面',)
                     self.controller.show_frame("VendorManagementFrame")
+                    # VendorManagementFrame调用reload_product_data方法重新载入数据
                     self.controller.frames["VendorManagementFrame"].reload_product_data(product_data)
+                    # 用一个List存储需要发送到其他界面的数据
+                    send_data = list()
+                    # 存储当前的用户id
+                    send_data.append(id)
+                    # VendorManagementFrame调用receive_vendor_data方法获取vendor_id等数据
+                    self.controller.frames["VendorManagementFrame"].receive_vendor_data(send_data)
                 elif type == "Manager":
                 # 跳转至管理系统界面的情况
+                    vendor_data = get_data_by_user(username=username,password=password)
                     self.controller.change_size_title('800x600','管理系统界面',)
                     self.controller.show_frame("AdministratorFrame")
+                    self.controller.frames["AdministratorFrame"].reload_vendor_data(vendor_data)
+                    send_data = list()
+                    send_data.append(id)
+                    self.controller.frames["AdministratorFrame"].receive_manager_data(send_data)
                 elif type == "Customer":
                 # 跳转至用户界面的情况
-                #     test_data1 = [
-                #     (1, 1, 1, 'Test Product 1', 99.99, 100),
-                #     (2, 1, 2, 'Test Product 2', 149.99, 50),
-                #     (3, 2, 1, 'Test Product 3', 199.99, 75),
-                    
-                # ]
+                    product_data = get_data_by_user(username=username,password=password)
                     self.controller.change_size_title('800x600','用户界面',)
                     self.controller.show_frame("UserFrame")
-                    # self.controller.frames['UserFrame'].reload_product(product_data = test_data1)
+                    self.controller.frames['UserFrame'].reload_product(product_data)
+                    send_data = list()
+                    send_data.append(id)
+                    self.controller.frames["UserFrame"].receive_user_data(send_data)
+                elif type == "Password Error":
+                # 密码验证错误的情况
+                    messagebox.showwarning(title="密码错误",message="密码验证失败,请重新输入")
+
 
         self.login_button = tk.Button(self, text="Login",command = login)
 

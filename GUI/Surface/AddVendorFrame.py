@@ -9,36 +9,39 @@ class AddVendorFrame(tk.Frame):
         self.layout_components()
 
     def init_components(self):
+        # manager_id变量
+        self.manager_id = 0
+
         # 创建并配置所有输入框和按钮
         self.vendor_id_entry = tk.Entry(self)
-        self.vendor_id_entry.insert(0, "Please write your Vendor_id.")
-        self.vendor_id_entry.bind('<FocusIn>', lambda e: self.on_entry_click(e, self.vendor_id_entry))
-        self.vendor_id_entry.bind('<FocusOut>', lambda e: self.on_focus_out(e, self.vendor_id_entry, "Please write your Vendor_id."))
-        self.vendor_id_entry.config(fg='grey')
+        # self.vendor_id_entry.insert(0, "Please write your Vendor_id.")
+        # self.vendor_id_entry.bind('<FocusIn>', lambda e: self.on_entry_click(e, self.vendor_id_entry))
+        # self.vendor_id_entry.bind('<FocusOut>', lambda e: self.on_focus_out(e, self.vendor_id_entry, "Please write your Vendor_id."))
+        # self.vendor_id_entry.config(fg='grey')
 
         self.business_name_entry = tk.Entry(self)
-        self.business_name_entry.insert(0, "Please write your Business name.")
-        self.business_name_entry.bind('<FocusIn>', lambda e: self.on_entry_click(e, self.business_name_entry))
-        self.business_name_entry.bind('<FocusOut>', lambda e: self.on_focus_out(e, self.business_name_entry, "Please write your Business name."))
-        self.business_name_entry.config(fg='grey')
+        # self.business_name_entry.insert(0, "Please write your Business name.")
+        # self.business_name_entry.bind('<FocusIn>', lambda e: self.on_entry_click(e, self.business_name_entry))
+        # self.business_name_entry.bind('<FocusOut>', lambda e: self.on_focus_out(e, self.business_name_entry, "Please write your Business name."))
+        # self.business_name_entry.config(fg='grey')
 
         self.geo_presence_entry = tk.Entry(self)
-        self.geo_presence_entry.insert(0, "Please write your Location.")
-        self.geo_presence_entry.bind('<FocusIn>', lambda e: self.on_entry_click(e, self.geo_presence_entry))
-        self.geo_presence_entry.bind('<FocusOut>', lambda e: self.on_focus_out(e, self.geo_presence_entry, "Please write your Location."))
-        self.geo_presence_entry.config(fg='grey')
+        # self.geo_presence_entry.insert(0, "Please write your Location.")
+        # self.geo_presence_entry.bind('<FocusIn>', lambda e: self.on_entry_click(e, self.geo_presence_entry))
+        # self.geo_presence_entry.bind('<FocusOut>', lambda e: self.on_focus_out(e, self.geo_presence_entry, "Please write your Location."))
+        # self.geo_presence_entry.config(fg='grey')
 
         self.vendor_account_entry = tk.Entry(self)
-        self.vendor_account_entry.insert(0, "Please write your Account.")
-        self.vendor_account_entry.bind('<FocusIn>', lambda e: self.on_entry_click(e, self.vendor_account_entry))
-        self.vendor_account_entry.bind('<FocusOut>', lambda e: self.on_focus_out(e, self.vendor_account_entry, "Please write your Account."))
-        self.vendor_account_entry.config(fg='grey')
+        # self.vendor_account_entry.insert(0, "Please write your Account.")
+        # self.vendor_account_entry.bind('<FocusIn>', lambda e: self.on_entry_click(e, self.vendor_account_entry))
+        # self.vendor_account_entry.bind('<FocusOut>', lambda e: self.on_focus_out(e, self.vendor_account_entry, "Please write your Account."))
+        # self.vendor_account_entry.config(fg='grey')
 
         self.vendor_secret_entry = tk.Entry(self)
-        self.vendor_secret_entry.insert(0, "Please write your Secret.")
-        self.vendor_secret_entry.bind('<FocusIn>', lambda e: self.on_entry_click(e, self.vendor_secret_entry))
-        self.vendor_secret_entry.bind('<FocusOut>', lambda e: self.on_focus_out(e, self.vendor_secret_entry, "Please write your Secret."))
-        self.vendor_secret_entry.config(fg='grey')
+        # self.vendor_secret_entry.insert(0, "Please write your Secret.")
+        # self.vendor_secret_entry.bind('<FocusIn>', lambda e: self.on_entry_click(e, self.vendor_secret_entry))
+        # self.vendor_secret_entry.bind('<FocusOut>', lambda e: self.on_focus_out(e, self.vendor_secret_entry, "Please write your Secret."))
+        # self.vendor_secret_entry.config(fg='grey')
 
         def back_to_admin():
             """返回管理系统界面"""
@@ -77,17 +80,19 @@ class AddVendorFrame(tk.Frame):
         # 配置列权重使得输入框可以水平拉伸
         self.grid_columnconfigure(1, weight=1)
 
-    def on_entry_click(self, event, entry):
-        if entry.get() in ["Please write your Vendor_id.", 
-                          "Please write your Business name.",
-                          "Please write your Location.",
-                          "Please write your Account.",
-                          "Please write your Secret."]:
-            entry.delete(0, tk.END)
-            entry.config(fg='black')
-
-    def on_focus_out(self, event, entry, default_text):
-        if entry.get() == '':
-            entry.insert(0, default_text)
-            entry.config(fg='grey')
+    
+    def receive_manager_id_and_delete_entry(self, values):
+        """接收manager_id并删除所有entry的值"""
+        # 第一个信息是manager_id
+        self.manager_id = values[0]
+        self.vendor_id_entry.delete(0,"end")
+        # self.vendor_id_entry.insert(0,values[1])
+        self.business_name_entry.delete(0,"end")
+        # self.business_name_entry.insert(0,values[2])
+        self.geo_presence_entry.delete(0,"end")
+        # self.geo_presence_entry.insert(0,values[3])
+        self.vendor_account_entry.delete(0,"end")
+        # self.vendor_id_entry.insert(0,values[4])
+        self.vendor_secret_entry.delete(0,'end')
+        # self.vendor_secret_entry.insert(0,values[5])
 

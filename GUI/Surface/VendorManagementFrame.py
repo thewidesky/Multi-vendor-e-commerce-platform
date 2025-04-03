@@ -17,6 +17,9 @@ class VendorManagementFrame(tk.Frame):
 
     def init_ui(self):
 
+        # 存储vendor_id的变量
+        self.vendor_id = 0
+
         # 创建搜索区域（顶部）
         search_frame = ttk.Frame(self)
         search_frame.grid(row=0, column=0, columnspan=3, padx=10, pady=5, sticky='ew')
@@ -112,6 +115,7 @@ class VendorManagementFrame(tk.Frame):
             self.controller.change_size_title('500x500','登录界面')
             # 跳转至登录界面
             self.controller.show_frame("LoginFrame")
+            # 重置登录界面
             self.controller.reset_login()
         # 返回登录按钮
         self.back_button = ttk.Button(button_frame, text='返回登录', command=back_to_login)
@@ -137,17 +141,24 @@ class VendorManagementFrame(tk.Frame):
 
     def reload_product_data(self, product_data):
         """重新加载商品信息"""
+        # 如果Treeview不为空，则删除Treeview中所有item
         if len(self.product_tree.get_children()) != 0:
             self.product_tree.delete(*self.product_tree.get_children())
+        # Treeview重新插入product_data中的item
         for item in product_data:
             self.product_tree.insert('', 'end', values=item)
 
 
     def get_current_product(self):
         """获取当前商品信息"""
+        # 如果当前Treeview选取不为空，则返回当前product的信息，否则返回None
         if self.product_tree.focus() != "":    
             current_product_values = self.product_tree.item(self.product_tree.focus())['values']
             print(current_product_values)
             return current_product_values
         else:
             return None
+        
+    def receive_vendor_data(self, data):
+        """获取vendor相关信息(id)"""
+        self.vendor_id = data[0]

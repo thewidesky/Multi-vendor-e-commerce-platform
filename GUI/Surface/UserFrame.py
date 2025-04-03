@@ -18,7 +18,12 @@ class UserFrame(tk.Frame):
         for item in product_data:
             self.tree.insert('', 'end', values=item)
 
+
     def init_ui(self):
+
+        #存储user_id的变量
+        self.user_id = 0
+
         # 创建顶部搜索区域
         search_frame = tk.Frame(self)
         search_frame.grid(row=0, column=0, columnspan=2, pady=10, padx=10, sticky='ew')
@@ -169,4 +174,7 @@ class UserFrame(tk.Frame):
         list_frame.grid_rowconfigure(0, weight=1)
         list_frame.grid_columnconfigure(0, weight=1)
 
+    def receive_user_data(self,data):
+        """获取user相关信息"""
+        self.user_id = data[0]
     
