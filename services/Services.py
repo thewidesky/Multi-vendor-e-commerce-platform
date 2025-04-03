@@ -80,6 +80,33 @@ def get_product_by_id(product_id):
 
 
 
+def get_vendor_data_by_id(vendor_id):
+    """根据供应商ID获取供应商信息
+    Args:
+        vendor_id (int): 供应商ID
+    Returns:
+        list: 包含供应商信息元组的列表，每个元组包含(VendorID、Business Name、Location、Account、Secret)
+    """
+    vendor_dao = VendorDAO()
+    vendor = vendor_dao.get_vendor_by_id(vendor_id)
+    if vendor:
+        return [(vendor.v_id, vendor.business_name, vendor.geo_presence, vendor.v_account, vendor.v_secret)]
+    return []
+
+
+# 测试代码
+def test_get_vendor_data():
+    print("\n测试根据ID获取供应商数据:")
+    # 测试存在的供应商ID
+    test_vendor_id = 20001
+    data = get_vendor_data_by_id(test_vendor_id)
+    print("供应商{0}的数据: {1}".format(test_vendor_id, data))
+    
+    # 测试不存在的供应商ID
+    test_vendor_id = 9999
+    data = get_vendor_data_by_id(test_vendor_id)
+    print("不存在的供应商{0}的数据: {1}".format(test_vendor_id, data))
+
 
 # 测试代码
 def test_get_data():
@@ -213,3 +240,4 @@ if __name__ == "__main__":
     test_get_products_by_tag()
     test_get_product_by_id()
     test_get_purchase_records()
+    test_get_vendor_data()
