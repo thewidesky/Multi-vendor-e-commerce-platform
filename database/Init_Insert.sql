@@ -124,5 +124,5 @@ INSERT INTO `Records Detail` (RD_ID, R_ID, P_ID, Price, Quantity, Subtotal) VALU
 (10,5,9,34.99,3,104.97);
 
 -- 插入Manager数据
-INSERT INTO Manager (M_ID, M_Secret) VALUES 
+INSERT INTO Manager (M_ID,M_name,M_Secret) VALUES 
 (1,"Manger",'secret009');
