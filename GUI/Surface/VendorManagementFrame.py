@@ -80,32 +80,32 @@ class VendorManagementFrame(tk.Frame):
             self.controller.change_size_title('800x600','添加产品')
             self.controller.show_frame("AddProductFrame")
 
-        def delete_product():
-            """删除商品"""
-            if self.get_current_product():
-                print(self.get_current_product())
-            else:
-                messagebox.showwarning(title="No Product Selection", message="You need to select a item before pressing button!")
+        # def delete_product():
+        #     """删除商品"""
+        #     if self.get_current_product():
+        #         print(self.get_current_product())
+        #     else:
+        #         messagebox.showwarning(title="选取错误", message="必须先选中一个商品！")
 
         def go_to_change():
             """跳转至修改商品界面"""
-            if self.product_tree.focus() != "":
+            if self.get_current_product():
                 self.controller.change_size_title('800x600','修改产品')
                 self.controller.show_frame("ChangeProductFrame")
+                self.controller.frames["ChangeProductFrame"].receive_product_values(self.get_current_product())
             else:
-                messagebox.showwarning(title="No Product Selection", message="You need to select a item before pressing button!")
+                messagebox.showwarning(title="选取错误", message="必须先选中一个商品！")
+        # 删除按钮
+        # self.delete_button = ttk.Button(button_frame, text='Delete', command=delete_product)
+        # self.delete_button.pack(side=tk.LEFT, padx=5)
 
-        # 添加产品按钮
-        self.add_button = ttk.Button(button_frame, text='Add_Product', command=go_to_add)
+        #添加按钮
+        self.add_button = ttk.Button(button_frame, text='添加商品', command=go_to_add)
         self.add_button.pack(side=tk.LEFT, padx=5)
 
-        # 修改产品按钮
-        self.change_button = ttk.Button(button_frame, text='Change Product information', command=go_to_change)
+        #修改按钮
+        self.change_button = ttk.Button(button_frame, text='修改商品', command=go_to_change)
         self.change_button.pack(side=tk.LEFT, padx=5)
-
-        # 删除按钮
-        self.delete_button = ttk.Button(button_frame, text='Delete', command=delete_product)
-        self.delete_button.pack(side=tk.LEFT, padx=5)
 
         #返回登录界面方法
         def back_to_login():
@@ -114,7 +114,7 @@ class VendorManagementFrame(tk.Frame):
             self.controller.show_frame("LoginFrame")
             self.controller.reset_login()
         # 返回登录按钮
-        self.back_button = ttk.Button(button_frame, text='Back to Login', command=back_to_login)
+        self.back_button = ttk.Button(button_frame, text='返回登录', command=back_to_login)
         self.back_button.pack(side=tk.LEFT, padx=5)
 
         # 配置网格权重，使产品列表区域可以自适应扩展

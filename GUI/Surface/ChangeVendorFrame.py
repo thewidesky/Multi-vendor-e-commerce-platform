@@ -11,37 +11,18 @@ class ChangeVendorFrame(tk.Frame):
     def init_components(self):
         # 创建并配置所有输入框和按钮
         self.vendor_id_entry = tk.Entry(self)
-        self.vendor_id_entry.insert(0, "Please write your Vendor_id.")
-        self.vendor_id_entry.bind('<FocusIn>', lambda e: self.on_entry_click(e, self.vendor_id_entry))
-        self.vendor_id_entry.bind('<FocusOut>', lambda e: self.on_focus_out(e, self.vendor_id_entry, "Please write your Vendor_id."))
-        self.vendor_id_entry.config(fg='grey')
 
         self.business_name_entry = tk.Entry(self)
-        self.business_name_entry.insert(0, "Please write your Business name.")
-        self.business_name_entry.bind('<FocusIn>', lambda e: self.on_entry_click(e, self.business_name_entry))
-        self.business_name_entry.bind('<FocusOut>', lambda e: self.on_focus_out(e, self.business_name_entry, "Please write your Business name."))
-        self.business_name_entry.config(fg='grey')
 
         self.geo_presence_entry = tk.Entry(self)
-        self.geo_presence_entry.insert(0, "Please write your Location.")
-        self.geo_presence_entry.bind('<FocusIn>', lambda e: self.on_entry_click(e, self.geo_presence_entry))
-        self.geo_presence_entry.bind('<FocusOut>', lambda e: self.on_focus_out(e, self.geo_presence_entry, "Please write your Location."))
-        self.geo_presence_entry.config(fg='grey')
 
         self.vendor_account_entry = tk.Entry(self)
-        self.vendor_account_entry.insert(0, "Please write your Account.")
-        self.vendor_account_entry.bind('<FocusIn>', lambda e: self.on_entry_click(e, self.vendor_account_entry))
-        self.vendor_account_entry.bind('<FocusOut>', lambda e: self.on_focus_out(e, self.vendor_account_entry, "Please write your Account."))
-        self.vendor_account_entry.config(fg='grey')
 
         self.vendor_secret_entry = tk.Entry(self)
-        self.vendor_secret_entry.insert(0, "Please write your Secret.")
-        self.vendor_secret_entry.bind('<FocusIn>', lambda e: self.on_entry_click(e, self.vendor_secret_entry))
-        self.vendor_secret_entry.bind('<FocusOut>', lambda e: self.on_focus_out(e, self.vendor_secret_entry, "Please write your Secret."))
-        self.vendor_secret_entry.config(fg='grey')
 
         def back_to_admin():
             """返回管理系统界面"""
+            self.clear_entries()
             self.controller.change_size_title('800x600','管理系统界面',)
             self.controller.show_frame("AdministratorFrame")
 
@@ -50,8 +31,9 @@ class ChangeVendorFrame(tk.Frame):
             #TO DO
             #添加逻辑
             back_to_admin()
+            self.clear_entries()
 
-        self.sure_changed_button = tk.Button(self, text="Sure Changed the Vendor information.", command=confirm_add)
+        self.sure_changed_button = tk.Button(self, text="Confirm Changed the Vendor information.", command=confirm_add)
         self.back_to_admin_button = tk.Button(self, text="Back to Admin", command=back_to_admin)
 
     def layout_components(self):
@@ -76,23 +58,19 @@ class ChangeVendorFrame(tk.Frame):
 
         # 配置列权重使得输入框可以水平拉伸
         self.grid_columnconfigure(1, weight=1)
-
-    def on_entry_click(self, event, entry):
-        if entry.get() in ["Please write your Vendor_id.", 
-                          "Please write your Business name.",
-                          "Please write your Location.",
-                          "Please write your Account.",
-                          "Please write your Secret."]:
-            entry.delete(0, tk.END)
-            entry.config(fg='black')
-
-    def on_focus_out(self, event, entry, default_text):
-        if entry.get() == '':
-            entry.insert(0, default_text)
-            entry.config(fg='grey')
     
     def receive_vendor_value(self, values):
         """接收其他Frame传来的信息"""
         self.vendor_id_entry.insert(0,values[0])
+        self.business_name_entry.insert(0,values[0])
+        self.geo_presence_entry.insert(0,values[0])
+
+    def clear_entries(self):
+        """离开界面时清空所有entry"""
+        self.vendor_id_entry.delete(0,'end')
+        self.business_name_entry.delete(0,'end')
+        self.geo_presence_entry.delete(0,'end')
+        self.vendor_account_entry.delete(0,'end')
+        self.vendor_secret_entry.delete(0,'end')
 
 
