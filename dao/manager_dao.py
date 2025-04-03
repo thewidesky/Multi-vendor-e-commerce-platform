@@ -6,6 +6,7 @@ from config import DB_CONFIG
 import pymysql
 from pymysql import cursors
 from models.Manager import Manager  # 假设存在Manager模型类
+from models.Customer import Customer  # 假设存在Manager模型类
 
 class ManagerDAO:
     def __init__(self):
@@ -25,7 +26,7 @@ class ManagerDAO:
     # 功能1：获取所有管理员
     def get_all_managers(self):
         """返回Manager对象列表"""
-        sql = "SELECT M_ID as m_id, M_Secret as m_secret FROM Manager"
+        sql = "SELECT M_ID as m_id, M_Name as m_name, M_Secret as m_secret FROM Manager"
         managers = []
         conn = None
         try:
@@ -36,6 +37,7 @@ class ManagerDAO:
                 for row in results:
                     managers.append(Manager.from_dict({
                         "m_id": row["m_id"],
+                        "m_name": row["m_name"],
                         "m_secret": row["m_secret"]
                     }))
             return managers
@@ -48,7 +50,7 @@ class ManagerDAO:
     # 功能2：根据ID查询管理员
     def get_manager_by_id(self, m_id):
         """返回Manager对象或None"""
-        sql = "SELECT M_ID as m_id, M_Secret as m_secret FROM Manager WHERE M_ID = %s"
+        sql = "SELECT M_ID as m_id, M_Name as m_name, M_Secret as m_secret FROM Manager WHERE M_ID = %s"
         conn = None
         try:
             conn = self._get_connection()
@@ -113,12 +115,12 @@ class ManagerDAO:
     # 功能5：创建管理员
     def create_manager(self, manager):
         """创建新管理员，返回包含M_ID的对象"""
-        sql = "INSERT INTO Manager (M_Secret) VALUES (%s)"
+        sql = "INSERT INTO Manager (M_Name, M_Secret) VALUES (%s, %s)"
         conn = None
         try:
             conn = self._get_connection()
             with conn.cursor() as cursor:
-                cursor.execute(sql, (manager.m_secret,))
+                cursor.execute(sql, (manager.m_name, manager.m_secret))
                 conn.commit()
                 manager.m_id = cursor.lastrowid
                 return manager
@@ -136,6 +138,32 @@ class ManagerDAO:
         finally:
             if conn:
                 conn.close()
+    
+    # 功能6：获取所有使用者的信息
+    def get_all_customer(self):
+        """返回Customer对象列表"""
+        sql = "SELECT C_ID as c_id, C_Name as c_name, Geo_Presence as geo_presence, C_Account as c_account, C_Secret as c_secret FROM Customer;"
+        customer = []
+        conn = None
+        try:
+            conn = self._get_connection()
+            with conn.cursor() as cursor:
+                cursor.execute(sql)
+                results = cursor.fetchall()
+                for row in results:
+                    customer.append(Customer.from_dict({
+                        "c_id": row["c_id"],
+                        "c_name": row["c_name"],
+                        "geo_presence":row["geo_presence"],
+                        "c_account":row["c_account"],
+                        "c_secret":row["c_secret"]
+                    }))
+            return customer
+        except Exception as e:
+            raise RuntimeError("获取用户列表失败: {0}".format(str(e)))
+        finally:
+            if conn:
+                conn.close()
 
 # 测试代码
 if __name__ == "__main__":
@@ -145,7 +173,7 @@ if __name__ == "__main__":
         
         try:
             # 测试创建
-            new_manager = Manager(m_secret="admin123")
+            new_manager = Manager(m_name="test_admin", m_secret="admin123")
             created = dao.create_manager(new_manager)
             print("[创建成功] ID: {0}".format(created.m_id))
             test_manager = created
@@ -157,9 +185,15 @@ if __name__ == "__main__":
             else:
                 print("[查询失败] 未找到管理员")
 
-            # 测试查询所有
+            # 测试查询所有管理者
             all_managers = dao.get_all_managers()
+            print("All Managers:", [m.to_dict() for m in all_managers])
             print("[查询全部] 共{0}条记录".format(len(all_managers)))
+
+            # 测试查询所有用户
+            all_customer = dao.get_all_customer()
+            print("All Customers:", [m.to_dict() for m in all_customer])
+            print("[查询全部] 共{0}条记录".format(len(all_customer)))
 
             # 测试更新
             test_manager.m_secret = "newsecret456"
