@@ -6,7 +6,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from dao.manager_dao import ManagerDAO
 from dao.Vendor_dao import VendorDAO
-from dao.Product_dao import ProductDAO
+from dao.product_dao import ProductDAO
 from main import check_user_type
 
 def get_data_by_user(username, password):

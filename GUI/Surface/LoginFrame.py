@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+from main import check_user_type
 
 class LoginFrame(tk.Frame):
     def __init__(self, parent, controller):
@@ -29,29 +30,32 @@ class LoginFrame(tk.Frame):
         
         #登录不同角色界面逻辑(目前只能写死)
         def login():
-            # 跳转至供应商管理系统界面的情况
-            # self.controller.change_size_title('800x600','供应商管理界面',)
-            # self.controller.show_frame("VendorManagementFrame")
-            # 跳转至管理系统界面的情况
-            self.controller.change_size_title('800x600','管理系统界面',)
-            self.controller.show_frame("AdministratorFrame")
-            # 跳转至用户界面的情况
-        #     password = self.password_entry.get()
-        #     password = password.strip()
-        #     if len(password) != 0 :
-        #         pass
-        #     else:
-        #         messagebox.showwarning(title="abc", message="no password")
-
-        #     test_data1 = [
-        #     (1, 1, 1, 'Test Product 1', 99.99, 100),
-        #     (2, 1, 2, 'Test Product 2', 149.99, 50),
-        #     (3, 2, 1, 'Test Product 3', 199.99, 75),
-            
-        # ]
-        #     self.controller.change_size_title('800x600','用户界面',)
-        #     self.controller.show_frame("UserFrame")
-            # self.controller.frames['UserFrame'].reload_product(product_data = test_data1)
+            username = self.username_entry.get()
+            username = username.strip()
+            password = self.password_entry.get()
+            password = password.strip()
+            if len(username) == 0 or len(password) == 0:
+                messagebox.showwarning(title="用户名密码为空",message="用户名或者密码不能为空")
+            else:
+                if check_user_type(username=username, password=password) == "Vendor":
+                # 跳转至供应商管理系统界面的情况
+                    self.controller.change_size_title('800x600','供应商管理界面',)
+                    self.controller.show_frame("VendorManagementFrame")
+                elif check_user_type(username=username, password=password) == "Manager":
+                # 跳转至管理系统界面的情况
+                    self.controller.change_size_title('800x600','管理系统界面',)
+                    self.controller.show_frame("AdministratorFrame")
+                elif check_user_type(username=username, password=password) == "Customer":
+                # 跳转至用户界面的情况
+                    test_data1 = [
+                    (1, 1, 1, 'Test Product 1', 99.99, 100),
+                    (2, 1, 2, 'Test Product 2', 149.99, 50),
+                    (3, 2, 1, 'Test Product 3', 199.99, 75),
+                    
+                ]
+                    self.controller.change_size_title('800x600','用户界面',)
+                    self.controller.show_frame("UserFrame")
+                    self.controller.frames['UserFrame'].reload_product(product_data = test_data1)
 
         self.login_button = tk.Button(self, text="Login",command = login)
 
