@@ -63,7 +63,7 @@ def initialize_database(file_path):
             connection.close()
 
 if __name__ == "__main__":
-    file_path = 'database/CreateAllTable.sql'
-    # file_path = 'database/Init_Insert.sql'
-    # file_path = 'database/DeleteAllTable.sql'
+    # file_path = 'CreateAllTable.sql'
+    file_path = 'Init_Insert.sql'
+    # file_path = 'DeleteAllTable.sql'
     initialize_database(file_path)

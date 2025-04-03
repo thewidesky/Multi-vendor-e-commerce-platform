@@ -6,7 +6,7 @@ from config import DB_CONFIG
 import pymysql
 from pymysql import cursors
 from models.Manager import Manager  # 假设存在Manager模型类
-from models.Customer import Customer  # 假设存在Manager模型类
+from models.customer import Customer  # 假设存在Manager模型类
 
 class ManagerDAO:
     def __init__(self):
