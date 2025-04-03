@@ -145,6 +145,36 @@ class VendorDAO:
             if conn:
                 conn.close()
 
+    def get_vendor_by_id(self, vendor_id):
+        """根据ID获取供应商信息"""
+        sql = "SELECT V_ID as v_id, Business_Name as business_name, " \
+              "Geo_Presence as geo_presence, V_Account as v_account, " \
+              "V_Secret as v_secret FROM Vendor WHERE V_ID = %s"
+        
+        conn = None
+        try:
+            conn = self._get_connection()
+            with conn.cursor() as cursor:
+                cursor.execute(sql, (vendor_id,))
+                result = cursor.fetchone()
+                if result:
+                    # 显式转换字段名（解决大小写敏感问题）
+                    converted = {
+                        'v_id': result['v_id'],
+                        'business_name': result['business_name'],
+                        'geo_presence': result['geo_presence'],
+                        'v_account': result['v_account'],
+                        'v_secret': result['v_secret']
+                    }
+                    return Vendor.from_dict(converted)
+                return None
+        except Exception as e:
+            print("获取供应商信息出错: {0}".format(e))
+            raise
+        finally:
+            if conn:
+                conn.close()
+
 # 测试代码调整
 if __name__ == "__main__":
     def test_dao():
@@ -162,8 +192,15 @@ if __name__ == "__main__":
             )
             created = dao.create_vendor(v)
             print("创建成功，ID:", created.v_id)
+
+            # 测试根据ID查询
+            found = dao.get_vendor_by_id(created.v_id)
+            if found:
+                print("根据ID查询成功:", found.to_dict())
+            else:
+                print("未找到供应商")
         except Exception as e:
-            print("创建测试失败:", str(e))
+            print("创建/查询测试失败:", str(e))
 
         # 测试查询
         try:
